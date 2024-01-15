@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .container {
+        display: flex;
+      }
+      .left-box {
+        width: 50%;
+        padding: 20px;
+      }
+      .right-box {
+        width: 50%;
+        padding: 20px;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      button {
+        padding: 5px 10px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0069d9;
+      }
+      .cart {
+        margin-top: 20px;
+      }
+      .cart ul {
+        list-style: none;
+        padding: 0;
+      }
+      .cart li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-box">
+        <h2>Products</h2>
+        <ul>
+          <li>
+            Product-1
+            <div>
+              <button onclick="addToCart(1)">+</button>
+              <span id="quantity-1">0</span>
+              <button onclick="removeFromCart(1)">-</button>
+            </div>
+          </li>
+          <li>
+            Product-2
+            <div>
+              <button onclick="addToCart(2)">+</button>
+              <span id="quantity-2">0</span>
+              <button onclick="removeFromCart(2)">-</button>
+            </div>
+          </li>
+          <li>
+            Product-3
+            <div>
+              <button onclick="addToCart(3)">+</button>
+              <span id="quantity-3">0</span>
+              <button onclick="removeFromCart(3)">-</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="right-box">
+        <h2>Cart</h2>
+        <div class="cart">
+          <ul id="cart-items">
+            <li>No Product added to the cart.</li>
+          </ul>
+          <p id="total-price"></p>
+        </div>
+      </div>
+    </div>
+    <script>
+      const Products = [
+        { id: 1, name: 'Product-1', price: 100 },
+        { id: 2, name: 'Product-2', price: 200 },
+        { id: 3, name: 'Product-3', price: 300 },
+      ];
+
+      let cart = [];
+
+      function addToCart(id) {
+        const existingProduct = cart.find((p) => p.id === id);
+        if (existingProduct) {
+          existingProduct.quantity++;
+        } else {
+          cart.push({ id, quantity: 1 });
+        }
+        updateCart();
+      }
+
+      function removeFromCart(id) {
+        const existingProduct = cart.find((p) => p.id === id);
+        if (existingProduct.quantity === 1) {
+          cart = cart.filter((p) => p.id !== id);
+        } else {
+          existingProduct.quantity--;
+        }
+        updateCart();
+      }
+
+      function updateCart() {
+        const cartItems = document.getElementById('cart-items');
+        const totalPrice = document.getElementById('total-price');
+        let cartHtml = '';
+        let total = 0;
+        if (cart.length === 0) {
+          cartHtml = '<li>No Product added to the cart.</li>';
+        } else {
+          cart.forEach((item) => {
+            const product = Products.find((p) => p.id === item.id);
+            const price = product.price * item.quantity;
+            total += price;
+            cartHtml += <li>${product.name} x ${item.quantity} - $${price}</li>;
+          });
+        }
+        cartItems.innerHTML = cartHtml;
+        totalPrice.innerHTML = Total Price: $${total};
+        Products.forEach((product) => {
+          const quantity = cart.find((p) => p.id === product.id)?.quantity || 0;
+          document.getElementById(quantity-${product.id}).innerHTML = quantity;
+        });
+      }
+    </script>
+  </body>
+</html>
